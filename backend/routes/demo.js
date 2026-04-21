@@ -39,6 +39,17 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
+    const existingReq = await DemoRequest.findOne({
+      $or: [
+        { email: { $regex: new RegExp(`^${email}$`, "i") } },
+        { phone }
+      ]
+    });
+
+    if (existingReq) {
+      return res.json({ success: true, duplicate: true, message: "Please take our services", product });
+    }
+
     // Save request in DB
     const newRequest = new DemoRequest({
       name,
@@ -147,7 +158,7 @@ router.post("/", async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Error saving demo request:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error", details: error.message, stack: error.stack });
   }
 });
 

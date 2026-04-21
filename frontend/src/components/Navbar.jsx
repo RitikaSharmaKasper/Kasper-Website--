@@ -1,5 +1,5 @@
 import React, { useState,useRef,useEffect,Suspense,lazy } from "react";
-import { Link,NavLink } from "react-router-dom";
+import { Link,NavLink, useLocation } from "react-router-dom";
 
 import "./Navbar.css";
 import ContactsPopup from "@/Contactspopup/Contactspopup.jsx";
@@ -17,6 +17,13 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState(""); // Track if "Solutions" or "Services" was clicked
 
   const navRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsPopupOpen(false);
+    setActiveTab("");
+    setIsOpen(false);
+  }, [location.pathname]);
 
   // Close hamburger when clicking outside navbar
   useEffect(() => {
@@ -54,9 +61,9 @@ const Navbar = () => {
   };
   return (
     <>
-      <nav ref={navRef} className="main-nav flex items-center justify-between px-8 py-4 shadow-xs sticky top-0 z-50">
+      <nav ref={navRef} className="main-nav flex items-center justify-between px-8 py-4 shadow-xs sticky top-0 z-[1000]">
         <div className="flex items-center shrink-0">
-          <NavLink to="/" onClick={() => {setIsOpen(false); setActiveTab("");}}>
+          <NavLink to="/" onClick={() => {setIsOpen(false); closePopup();}}>
             <img
               src={logo}
               alt="Kasper Logo"
@@ -69,7 +76,7 @@ const Navbar = () => {
           className={`menu-div ${isOpen ? "flex" : "hidden"} md:flex items-center`}
         >
           <li>
-            <NavLink to="/" className={navLinkStyles} onClick={() => {setIsOpen(false); setActiveTab("");}}>
+            <NavLink to="/" className={navLinkStyles} onClick={() => {setIsOpen(false); closePopup();}}>
               Home
             </NavLink>
           </li>
@@ -119,13 +126,13 @@ const Navbar = () => {
           </li>
 
           <li>
-            <NavLink to="/About" className={navLinkStyles} onClick={() => { setIsOpen(false); setActiveTab(""); }}>
+            <NavLink to="/about" className={navLinkStyles} onClick={() => { setIsOpen(false); closePopup(); }}>
               About Us
             </NavLink>
           </li>
 
           <li>
-            <NavLink to="/insightsblogs" className={navLinkStyles} onClick={() => { setIsOpen(false); setActiveTab(""); }}>
+            <NavLink to="/insightsblogs" className={navLinkStyles} onClick={() => { setIsOpen(false); closePopup(); }}>
               Insights
             </NavLink>
           </li>

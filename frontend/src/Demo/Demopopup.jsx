@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
+import { useNavigate } from "react-router-dom";
 import "./Demopopup.css";
 import { Toaster } from "react-hot-toast";
 import { FaUser, FaEnvelope, FaTimes } from "react-icons/fa";
@@ -10,6 +11,7 @@ import BASE_URL from "../Pages/Config/Config.js";
 
 const Demopopup = ({ isOpen, onClose }) => {
   // 1. Initialize State
+  const navigate = useNavigate();
   const [storeData, setStoreData] = useState({
     name: "",
     company: "",
@@ -132,11 +134,21 @@ const Demopopup = ({ isOpen, onClose }) => {
     try {
       const response = await axios.post(`${BASE_URL}/api/demo`, payload);
       if (response.data?.success) {
-        toast.success(response.data.message || "Demo credentials sent to your email!");
-        resetForm();
-        setTimeout(() => {
-          onClose?.();
-        }, 1500);
+        if (response.data.duplicate) {
+          toast.error(response.data.message || "Please take our services");
+          const slug = storeData.queryType.toLowerCase();
+          setTimeout(() => {
+            onClose?.();
+            navigate("/thank-you", { state: { title: "Notice", message: response.data.message || "Please take our services", productLink: `/solutions/${slug}`, duplicate: true } });
+          }, 1500);
+        } else {
+          toast.success(response.data.message || "Demo credentials sent to your email!");
+          resetForm();
+          setTimeout(() => {
+            onClose?.();
+            navigate("/thank-you", { state: { title: "Thank You!", message: "Our team will connect with you soon." } });
+          }, 1500);
+        }
       } else {
         toast.error(response.data.error || "Failed to submit request.");
       }
@@ -153,7 +165,7 @@ const Demopopup = ({ isOpen, onClose }) => {
   return ReactDOM.createPortal(
     <div className="popup-overlay" onClick={onClose}>
       <div className="contact-popup-container" onClick={(e) => e.stopPropagation()}>
-          <Toaster position="top-center" reverseOrder={false} />
+          <Toaster position="top-center" reverseOrder={false} containerStyle={{ zIndex: 9999999 }} />
         <button className="popup-close-btn" onClick={onClose} aria-label="Close">
           <FaTimes />
         </button>

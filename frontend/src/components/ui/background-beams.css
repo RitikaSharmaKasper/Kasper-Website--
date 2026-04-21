@@ -17,7 +17,7 @@
 /* --- Specific Range: 1000px to 1700px --- */
 @media (max-width: 1850px) and (min-width: 1000px) {
   .beams-dimensions {
-    height: 1032px;
+    height: 750px;
   }
 }
 

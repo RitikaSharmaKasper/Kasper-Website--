@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Servicespopup.css";
 import Services_popupimg from "../assets/images/Services_popupimg.svg";
@@ -8,6 +8,15 @@ import servicescontact from "../assets/images2/services-contact.png";
 import computer  from "../assets/images2/Computer.svg"
 //  import servicesgradientimg from "../assets/images2/servicesgradientimg.svg"
 const Servicespopup = ({ isOpen, onClose, type }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [isOpen]);
+
   if (!isOpen) return null; 
   return (
 

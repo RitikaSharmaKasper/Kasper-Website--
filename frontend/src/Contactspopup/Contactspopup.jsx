@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
+import { useNavigate } from "react-router-dom";
 import "./Contact.css";
 import { FaUser, FaEnvelope, FaTimes } from "react-icons/fa";
 import axios from "axios";
@@ -10,6 +11,7 @@ import img from "../assets/images/img.svg";
 import BASE_URL from "../Pages/Config/Config.js";
 
 const ContactsPopup = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
   const [storeData, setStoreData] = useState({
     name: "",
     company: "",
@@ -141,16 +143,32 @@ const ContactsPopup = ({ isOpen, onClose }) => {
       message: storeData.message.trim(),
     };
 
-    // console.log("Submitting payload:", payload);
-
     try {
+      // Step 1: Fetch existing contacts and check for duplicates on frontend
+      const existingRes = await axios.get(`${BASE_URL}/api/contact`);
+      const existingContacts = existingRes.data?.contacts || [];
+
+      const isDuplicate = existingContacts.some(
+        (c) =>
+          c.email?.toLowerCase() === payload.email.toLowerCase() ||
+          c.phone === payload.phone
+      );
+
+      if (isDuplicate) {
+        toast.error("Duplicate entry found. Email ID or Phone Number already exists.");
+        setLoading(false);
+        return;
+      }
+
+      // Step 2: No duplicate — submit normally
       const response = await axios.post(`${BASE_URL}/api/contact`, payload);
 
       if (response.data?.success) {
-         toast.success(response.data.message || "Thank You! , Our team will connect with you soon!");
+        toast.success(response.data.message || "Thank You! Our team will connect with you soon!");
         resetForm();
         setTimeout(() => {
           onClose?.();
+          navigate("/thank-you", { state: { title: "Thank You!", message: "Our team will connect with you soon." } });
         }, 1200);
       } else {
         toast.error("Failed to submit contact form.");
@@ -173,7 +191,7 @@ const ContactsPopup = ({ isOpen, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
 
-           <Toaster position="top-center" reverseOrder={false} />
+           <Toaster position="top-center" reverseOrder={false} containerStyle={{ zIndex: 9999999 }} />
         <button
           className="popup-close-btn"
           onClick={onClose}

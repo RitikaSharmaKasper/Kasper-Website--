@@ -57,6 +57,8 @@ import Main_ServicesSports from "./Solutions/Sports and Wellness/Main_ServicesSp
 import Main_ServicesITAndlTES from "./Solutions/IT & ITES/Main_ServicesITAndlTES.jsx";
 import CareersPage from "./Career/CareersPage.jsx";
 import PrivacyPolicy from "./TermsAndPrivacy/PrivacyPolicy.jsx";
+import ThankYou from "./Pages/ThankYou/ThankYou.jsx";
+
 function App() {
   return (
     <>
@@ -68,6 +70,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/career" element={<CareersPage />} />
+          <Route path="/thank-you" element={<ThankYou />} />
           {/* Solutions */}
           <Route path="/solutions/ims" element={<Main_SolutionIms />} />
           /* <Route path="/solutions/lms" element={<Main_SolutionLms />} />

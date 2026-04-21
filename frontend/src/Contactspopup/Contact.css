@@ -387,7 +387,7 @@ textarea {
 
 
   .contact-right img {
-    width: 60% !important;
+    width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
   }
@@ -413,7 +413,7 @@ textarea {
   .contact { padding: 24px 16px !important; gap: 20px !important; }
   .contact-left { width: 100% !important; max-width: 100% !important; }
   .contact-right { width: 100% !important; order: -1 !important; }
-  .contact-right img { width: 50% !important; max-width: 100% !important; height: auto !important; margin-top: 32px; }
+  .contact-right img { width: 100% !important; max-width: 100% !important; height: auto !important; margin-top: 32px; }
   .contact-left h2 { font-size: 15px !important; margin-top:1px; margin-bottom: 6px !important;}
   .contact-left p { font-size: 12px !important; margin-bottom: 15px !important; }
   .form-row { flex-direction: column !important; gap: 12px !important; }
@@ -445,7 +445,7 @@ textarea {
   .contact { padding: 20px 14px !important; gap: 18px !important; }
   .contact-left { width: 100% !important; max-width: 100% !important; }
   .contact-right { width: 100% !important; order: -1 !important; }
-  .contact-right img { width: 60% !important; max-width: 100% !important; height: auto !important; }
+  .contact-right img { width: 100% !important; max-width: 100% !important; height: auto !important; }
   .contact-left h2 { font-size: 14px !important;  margin-top:1px;}
   .contact-left p { font-size: 12px !important; }
   .form-row { flex-direction: column !important; gap: 10px !important; }
@@ -478,7 +478,7 @@ textarea {
   .contact { padding: 18px 12px !important; gap: 16px !important; }
   .contact-left { width: 100% !important; max-width: 100% !important; }
   .contact-right { width: 100% !important; order: -1 !important; }
-  .contact-right img { width: 50% !important; max-width: 100% !important; height: auto !important; }
+  .contact-right img { width: 100% !important; max-width: 100% !important; height: auto !important; }
   .contact-left h2 { font-size: 13px !important; margin-top:1px;}
   .contact-left p { font-size: 11px !important; }
   .form-row { flex-direction: column !important; gap: 8px !important; }

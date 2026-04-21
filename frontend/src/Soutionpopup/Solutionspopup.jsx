@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "./Solutionpopup.css"
 import soon from "../assets/images2/soon.png"
 import solutionpopup2 from "../assets/images2/solution-popup-2.svg"
 import solutionpopup1 from "../assets/images2/solution-popup-1.svg"
 const Solutionspopup = ({ isOpen, onClose, type }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const industries = [

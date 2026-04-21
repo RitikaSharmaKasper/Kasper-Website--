@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"; //
 import "./Profile.css";
 import axios from "axios";
 import { Container } from "react-bootstrap";
+import toast, { Toaster } from "react-hot-toast";
 import BASE_URL from "../Pages/Config/Config.js"
 
 const Profile = () => {
@@ -57,11 +58,11 @@ const Profile = () => {
         const maxSize = 2 * 1024 * 1024;
 
         if (!validTypes.includes(file.type)) {
-          alert("Only JPG and PNG files are allowed.");
+          toast.error("Only JPG and PNG files are allowed.");
           return;
         }
         if (file.size > maxSize) {
-          alert("File size must be under 2MB.");
+          toast.error("File size must be under 2MB.");
           return;
         }
         setFile(file);
@@ -92,7 +93,7 @@ const Profile = () => {
           },
         },
       );
-      alert("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
       console.log("Update response:", response.data);
 
       const updatedUser = response.data.user;
@@ -111,7 +112,7 @@ const Profile = () => {
       localStorage.setItem("profile", response.data.user.profile);
     } catch (error) {
       //console.error("Error updating profile:", error.response?.data || error.message);
-      alert("Failed to update profile.");
+      toast.error("Failed to update profile.");
     }
   };
 
@@ -132,6 +133,7 @@ const Profile = () => {
         fontSize: "15px",
       }}
     >
+      <Toaster position="top-center" reverseOrder={false} />
       <div
         className="profilepageview"
         style={{
@@ -163,7 +165,6 @@ const Profile = () => {
             <strong>Bio:</strong> {formData.bio || "No bio provided"}
           </p>
           <div className="pimage-container">
-            {(file || formData.profile) && (
               <img
                 src={
                   file
@@ -172,14 +173,36 @@ const Profile = () => {
                       ? `${BASE_URL}/upload/${formData.profile}`
                       : "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-male-user-profile-vector-illustration-isolated-background-man-profile-sign-business-concept_157943-38764.jpg"
                 }
-                alt=""
+                alt="Profile"
                 style={{
                   width: "60%",
                   borderRadius: "10px",
                   marginTop: "10px",
                 }}
               />
-            )}
+              {(file || formData.profile) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFile(null);
+                    setFormData((prev) => ({ ...prev, profile: "" }));
+                    toast.success("Profile image removed. Click 'Update Profile' to save.");
+                  }}
+                  style={{
+                    display: "block",
+                    marginTop: "8px",
+                    padding: "6px 14px",
+                    backgroundColor: "#e74c3c",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "13px",
+                  }}
+                >
+                  Remove Image
+                </button>
+              )}
           </div>
         </div>
 
