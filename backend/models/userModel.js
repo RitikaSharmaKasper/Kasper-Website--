@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema(
             //required:[true,"profile is required"],
         },
         bio:{
-            type:String
+            type:String,
+            default:""
         },
         role:{
             type:String,

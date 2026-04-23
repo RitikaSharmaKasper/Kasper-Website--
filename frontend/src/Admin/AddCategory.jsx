@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import BASE_URL from "../Pages/Config/Config.js"
 import "./AddCategory.css"
 import { Helmet } from "react-helmet-async";
@@ -12,6 +12,8 @@ const Addcategory = () => {
   const navigate = useNavigate();
   const [input, setInput] = useState({ title: "" });
   const [categories, setCategories] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingCategoryId, setDeletingCategoryId] = useState("");
 
   useEffect(() => {
     fetchCategories();
@@ -26,7 +28,7 @@ const Addcategory = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (data?.success && Array.isArray(data.category)) {
-        setCategories(data.category);
+        setCategories([...data.category].reverse());
       } else {
         toast.error("No categories found");
         setCategories([]);
@@ -49,6 +51,7 @@ const Addcategory = () => {
 
   const handleCategory = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("No authentication token found. Please log in.");
@@ -60,10 +63,11 @@ const Addcategory = () => {
       return;
     }
     if (!/^[A-Za-z\s]{1,50}$/.test(input.title)) {
-      alert("Category should be only letters and spaces, max 50 characters.");
+      toast.error("Category should use only letters and spaces, max 50 characters.");
       return;
     }
 
+    setIsSubmitting(true);
     try {
       const { data } = await axios.post(
         `${BASE_URL}/api/v1/category/add-categories`,
@@ -72,8 +76,15 @@ const Addcategory = () => {
       );
       if (data.success) {
         toast.success("Category added successfully");
-          setInput({ title: "" });
-        navigate("/adminsidebar/addblog");
+        setInput({ title: "" });
+        if (data.newcategory) {
+          setCategories((prev) => [
+            data.newcategory,
+            ...prev.filter((cat) => cat._id !== data.newcategory._id),
+          ]);
+        } else {
+          fetchCategories();
+        }
       } else {
         toast.error("Failed to add category");
       }
@@ -86,8 +97,34 @@ const Addcategory = () => {
     toast.error("Error adding category");
     console.error("Add Category Error:", error);
   }
+} finally {
+  setIsSubmitting(false);
 }
 
+  };
+
+  const handleDeleteCategory = async (categoryId) => {
+    const token = localStorage.getItem("token");
+    if (!token || !categoryId || deletingCategoryId) return;
+
+    try {
+      setDeletingCategoryId(categoryId);
+      await axios.delete(
+        `${BASE_URL}/api/v1/category/delete-categories/${categoryId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setCategories((prev) => prev.filter((cat) => cat._id !== categoryId));
+      toast.success("Category deleted successfully");
+      if (input.title && categories.find((cat) => cat._id === categoryId)?.title === input.title) {
+        setInput({ title: "" });
+      }
+    } catch (error) {
+      toast.error("Failed to delete category");
+      console.error("Delete Category Error:", error);
+    } finally {
+      setDeletingCategoryId("");
+    }
   };
 
   if (!id) {
@@ -100,6 +137,7 @@ const Addcategory = () => {
 
   return (
     <>
+    <Toaster position="top-center" reverseOrder={false} />
     <Helmet
     
     
@@ -177,6 +215,7 @@ const Addcategory = () => {
         <div style={{ textAlign: "center" }}>
           <button
             type="submit"
+            disabled={isSubmitting}
             style={{
               backgroundColor: "#659ee8",
               color: "white",
@@ -184,10 +223,11 @@ const Addcategory = () => {
               padding: "10px 20px",
               fontSize: "16px",
               borderRadius: "6px",
-              cursor: "pointer",
+              cursor: isSubmitting ? "not-allowed" : "pointer",
+              opacity: isSubmitting ? 0.8 : 1,
             }}
           >
-            Add Category
+            {isSubmitting ? "Adding..." : "Add Category"}
           </button>
         </div>
       </form>
@@ -212,21 +252,54 @@ const Addcategory = () => {
             }}
           >
             {categories.map((cat) => (
-              <button
+              <div
                 key={cat._id}
-                onClick={() => setInput({ title: cat.title })}
                 style={{
                   padding: "8px 12px",
                   borderRadius: "6px",
                   border: "1px solid #ccc",
                   backgroundColor: "white",
-                  cursor: "pointer",
                   flex: "0 1 calc(33% - 10px)",
-                  textAlign: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "8px",
                 }}
               >
-                {cat.title}
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setInput({ title: cat.title })}
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    padding: 0,
+                    flex: 1,
+                    color: "inherit",
+                  }}
+                >
+                  {cat.title}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteCategory(cat._id)}
+                  disabled={deletingCategoryId === cat._id}
+                  aria-label={`Delete ${cat.title}`}
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    color: "#d9534f",
+                    cursor:
+                      deletingCategoryId === cat._id ? "not-allowed" : "pointer",
+                    fontSize: "16px",
+                    lineHeight: 1,
+                    padding: 0,
+                  }}
+                >
+                  ×
+                </button>
+              </div>
             ))}
           </div>
         )}

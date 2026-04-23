@@ -279,8 +279,13 @@ exports.createBlogController = async (req, res) => {
 //update a blog
 exports.updateBlogController = async (req, res) => {
   try {
-    const { slugOrId } = req.params
-    const { title, description, image } = req.body
+    const { slugOrId } = req.params;
+
+    // Handle file upload for thumbnail
+    let thumbnail = [];
+    if (req.files && req.files.length > 0) {
+      thumbnail = req.files.map((file) => file.path); // already Cloudinary URL
+    }
 
     // Use mongoose's built-in ObjectId check
     const isObjectId = mongoose.Types.ObjectId.isValid(slugOrId);
@@ -297,10 +302,20 @@ exports.updateBlogController = async (req, res) => {
     if (req.user.role !== 'admin' && blog.user._id.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: 'Unauthorized to modify this blog' });
     }
+
+    // Prepare update data
+    const updateData = { ...req.body };
+    if (thumbnail.length > 0) {
+      updateData.thumbnail = thumbnail;
+      updateData.image = ""; // Clear URL if a file is uploaded to avoid priority issues
+    } else if (req.body.image) {
+      updateData.thumbnail = []; // Clear file if a URL is provided
+    }
+
     // Proceed with update
     const updatedBlog = await blogModel.findOneAndUpdate(
       filter,
-      { ...req.body },
+      updateData,
       { new: true }
     );
     return res.status(200).send({
@@ -607,4 +622,21 @@ exports.getBlogsByCategory = async (req, res) => {
   }
 };
 
+
+// Image upload for Jodit Editor
+exports.uploadImageController = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "No file uploaded" });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Image uploaded successfully",
+      link: req.file.path, 
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Upload failed" });
+  }
+};
 

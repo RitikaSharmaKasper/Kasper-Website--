@@ -20,8 +20,9 @@ const cloudinary = require('../config/Cloudinary');
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'blog-images', // Cloudinary folder name
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    folder: 'blog-content', // Cloudinary folder name
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'mp4', 'gif'],
+    resource_type: "auto",
     // transformation: [{ width: 800, height: 600, crop: 'limit' }],
   },
 });

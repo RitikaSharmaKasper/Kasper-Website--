@@ -24,7 +24,9 @@ import BASE_URL from "../Pages/Config/Config.js"
 
 const AdminLayouts = () => {
   const [selectedTab, setSelectedTab] = useState("blogs");
-
+const [profile, setProfile] = useState(localStorage.getItem("profile"));
+  const [currentName, setCurrentName] = useState(localStorage.getItem("name"));
+  const [currentEmail, setCurrentEmail] = useState(localStorage.getItem("email"));
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("name");
   const userId = localStorage.getItem("userId");
@@ -62,14 +64,22 @@ const AdminLayouts = () => {
   // const drawerWidth = isTablet ? 130 : 260;
   const drawerWidth = isCompact ? 0 : 260;
 
-  const [profile, setProfile] = useState(localStorage.getItem("profile"));
+ useEffect(() => {
+    const syncSidebarData = () => {
+      setProfile(localStorage.getItem("profile"));
+      setCurrentName(localStorage.getItem("name"));
+      setCurrentEmail(localStorage.getItem("email"));
+    };
 
-  useEffect(() => {
-    const storedProfile = localStorage.getItem("profile");
-    if (storedProfile) {
-      setProfile(storedProfile);
-    }
-  }, [location.pathname]);
+    // Initial load and path change sync
+    syncSidebarData();
+
+    // Listen for storage changes (Jab Profile.js update karega)
+    window.addEventListener("storage", syncSidebarData);
+    
+    return () => window.removeEventListener("storage", syncSidebarData);
+  }, [location.pathname]); 
+  // --- SYNC LOGIC END ---
   return (
     <>
       <Header />

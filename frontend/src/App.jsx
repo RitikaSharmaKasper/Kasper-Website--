@@ -192,6 +192,7 @@ function App() {
         {/* GROUP 2: Independent Pages (NO Navbar, NO Footer) */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/blog-details/:slugOrId" element={<AddBlog />} />
 
         {/* Admin Section (NO Navbar, NO Footer - uses its own Sidebar) */}
         <Route path="/adminsidebar" element={<AdminLayouts />}>
@@ -200,6 +201,7 @@ function App() {
           <Route path="my-blogs" element={<UserBlogs />} />
           <Route path="addcategory" element={<Addcategory />} />
           <Route path="addblog" element={<AddBlog />} />
+          <Route path="blog-details/:slugOrId" element={<AddBlog />} />
         </Route>
       </Routes>
     </>

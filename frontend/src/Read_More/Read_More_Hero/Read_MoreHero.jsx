@@ -10,6 +10,24 @@ const Read_More_Blog = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const resolveBlogImage = (blogData) => {
+    if (!blogData) return "https://via.placeholder.com/800x600?text=Blog+Image";
+
+    if (blogData.image?.trim()) {
+      return blogData.image;
+    }
+
+    if (Array.isArray(blogData.thumbnail) && blogData.thumbnail.length > 0) {
+      return blogData.thumbnail[0];
+    }
+
+    if (typeof blogData.thumbnail === "string" && blogData.thumbnail.trim()) {
+      return blogData.thumbnail;
+    }
+
+    return "https://via.placeholder.com/800x600?text=Blog+Image";
+  };
+
   // Helper function to strip HTML tags
   const stripHtmlTags = (html) => {
     if (!html) return "";
@@ -61,7 +79,7 @@ const Read_More_Blog = () => {
       <div className="error-container">
         <h2>Oops! Something went wrong</h2>
         <p>{error || "Blog post not found"}</p>
-        <Link to="/blogs" className="back-btn">
+        <Link to="/insightsblogs" className="back-btn">
           ← Back to Blogs
         </Link>
       </div>
@@ -122,7 +140,7 @@ const Read_More_Blog = () => {
         <div className="featured-blog">
           <div className="featured-image">
             <img
-              src={blog.thumbnail}
+              src={resolveBlogImage(blog)}
               alt={blog.title}
               onError={(e) => {
                 e.target.src =

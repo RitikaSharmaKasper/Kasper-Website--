@@ -9,6 +9,24 @@ const Read_More_Blog = () => {
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const resolveBlogImage = (blogData) => {
+    if (!blogData) return "";
+
+    if (blogData.image?.trim()) {
+      return blogData.image;
+    }
+
+    if (Array.isArray(blogData.thumbnail) && blogData.thumbnail.length > 0) {
+      return blogData.thumbnail[0];
+    }
+
+    if (typeof blogData.thumbnail === "string" && blogData.thumbnail.trim()) {
+      return blogData.thumbnail;
+    }
+
+    return "";
+  };
+
   useEffect(() => {
     const getBlog = async () => {
       try {
@@ -77,6 +95,9 @@ const Read_More_Blog = () => {
   if (loading) return <h2>Loading...</h2>;
   if (!blog) return <h2>Blog not found</h2>;
 
+  const imageSrc = resolveBlogImage(blog);
+  const introText = stripHtmlTags(blog.description).trim();
+
   return (
     <div className="Blog_section">
       {/* Table of Contents */}
@@ -108,16 +129,14 @@ const Read_More_Blog = () => {
       {/* Blog Content */}
       <div className="Blog_Content_details">
         <div className="content-wrapper">
-          <p className="blog-paragraph">
-            {blog.p
-              ? stripHtmlTags(blog.p)
-              : stripHtmlTags(blog.description?.substring(0, 200))}
-          </p>
+          {introText && (
+            <p className="blog-paragraph">{introText.substring(0, 200)}</p>
+          )}
 
-          {blog?.img && (
+          {imageSrc && (
             <div className="image_section">
               <img
-                src={blog.img}
+                src={imageSrc}
                 alt={blog.title || "Blog image"}
                 onError={(e) => {
                   e.target.style.display = "none";

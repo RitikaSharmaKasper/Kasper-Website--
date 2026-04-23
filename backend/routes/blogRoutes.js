@@ -7,6 +7,7 @@ const {
   deleteBlogController,
   userBlogController,
   getBlogsByCategory,
+  uploadImageController,
 } = require("../controllers/blogController");
 const upload = require("../middlewares/multer");
 const checkIsUserAuthenticated = require("../middlewares/authMiddleware");
@@ -28,7 +29,12 @@ router.post(
 );
 
 //PUT || update blog
-router.put("/update-blog/:slugOrId", checkIsUserAuthenticated, updateBlogController);
+router.put(
+  "/update-blog/:slugOrId",
+  checkIsUserAuthenticated,
+  upload.array("thumbnail", 1),
+  updateBlogController
+);
 
 //GET || SINGLE blog details
 router.get("/get-blog/:slugOrId", getBlogsByIdController);
@@ -46,6 +52,7 @@ router.get("/user-blog/:id", userBlogController);
 //get blogs by category
 router.get("/category/:slug", getBlogsByCategory);
 
-
+// POST || upload image for editor
+router.post("/upload-image", checkIsUserAuthenticated, upload.single("image"), uploadImageController);
 
 module.exports = router;

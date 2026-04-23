@@ -178,7 +178,7 @@ exports.loginController = async (req, res) => {
 exports.updateProfileController = async (req, res) => {
     const { id } = req.params;
     try {
-        const { username, email, bio } = req.body
+        const { username, email, bio, removeProfileImage } = req.body
         const profilePicture = req.file ? req.file.path : "";
         const user = await userModel.findById(id);
         if (!user) {
@@ -190,9 +190,15 @@ exports.updateProfileController = async (req, res) => {
 
         if (username) user.username = username;
         if (email) user.email = email;
-        if (bio) user.bio = bio;
+        // if (bio) user.bio = bio;
+        //   if (bio !== undefined) { user.bio = bio; }
+        if (req.body.bio !== undefined) {
+    user.bio = bio === 'null' ? "" : bio; 
+    user.markModified('bio');
+}
+        if (removeProfileImage === "true") user.profile = "";
         if (profilePicture) user.profile = profilePicture;
-
+user.markModified('bio');
         await user.save();
 
         return res.status(200).send({

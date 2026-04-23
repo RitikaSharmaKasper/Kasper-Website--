@@ -52,14 +52,14 @@
 }
 
 .blogpreview-title {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: #333;
 }
 
-.blog-description {
+.blog-preview-description {
   font-size: 14px;
-  color: #666;
+  color: #878787;
    display: -webkit-box;
   -webkit-line-clamp: 2;
   display: -webkit-box;
