@@ -19,11 +19,12 @@ const cloudinary = require('../config/Cloudinary');
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: 'blog-content', // Cloudinary folder name
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'mp4', 'gif'],
-    resource_type: "auto",
-    // transformation: [{ width: 800, height: 600, crop: 'limit' }],
+  params: async (req, file) => {
+    return {
+      folder: 'blog-content',
+      resource_type: 'auto',
+      allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'mp4', 'mov', 'webm'],
+    };
   },
 });
 

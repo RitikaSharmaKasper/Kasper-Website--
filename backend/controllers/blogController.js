@@ -217,10 +217,10 @@ exports.createBlogController = async (req, res) => {
       });
     }
 
-    // ✅ FIX: NO cloudinary.uploader.upload()
-    let thumbnail = [];
+    // Get thumbnail path (Cloudinary URL) - save as String for frontend compatibility
+    let thumbnail = "";
     if (req.files && req.files.length > 0) {
-      thumbnail = req.files.map((file) => file.path); // already Cloudinary URL
+      thumbnail = req.files[0].path; 
     }
 
     // Generate unique slug
@@ -281,10 +281,10 @@ exports.updateBlogController = async (req, res) => {
   try {
     const { slugOrId } = req.params;
 
-    // Handle file upload for thumbnail
-    let thumbnail = [];
+    // Handle file upload for thumbnail - save as String
+    let thumbnail = "";
     if (req.files && req.files.length > 0) {
-      thumbnail = req.files.map((file) => file.path); // already Cloudinary URL
+      thumbnail = req.files[0].path; 
     }
 
     // Use mongoose's built-in ObjectId check
@@ -305,11 +305,11 @@ exports.updateBlogController = async (req, res) => {
 
     // Prepare update data
     const updateData = { ...req.body };
-    if (thumbnail.length > 0) {
+    if (thumbnail) {
       updateData.thumbnail = thumbnail;
-      updateData.image = ""; // Clear URL if a file is uploaded to avoid priority issues
+      updateData.image = ""; 
     } else if (req.body.image) {
-      updateData.thumbnail = []; // Clear file if a URL is provided
+      updateData.thumbnail = ""; 
     }
 
     // Proceed with update
@@ -627,16 +627,24 @@ exports.getBlogsByCategory = async (req, res) => {
 exports.uploadImageController = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ success: false, message: "No file uploaded" });
+      console.log("No file object in request");
+      return res.status(400).json({ success: false, message: "No file uploaded. Make sure field name is 'image'" });
     }
+    
+    console.log("Image uploaded to Cloudinary:", req.file.path);
+    
     return res.status(200).json({
       success: true,
       message: "Image uploaded successfully",
       link: req.file.path, 
     });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, message: "Upload failed" });
+    console.error("Editor Upload Error Details:", error);
+    return res.status(500).json({ 
+      success: false, 
+      message: "Internal server error during upload",
+      debug: error.message 
+    });
   }
 };
 
