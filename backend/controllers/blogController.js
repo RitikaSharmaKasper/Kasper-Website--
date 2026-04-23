@@ -217,10 +217,10 @@ exports.createBlogController = async (req, res) => {
       });
     }
 
-    // Get thumbnail path (Cloudinary URL) - save as String for frontend compatibility
-    let thumbnail = "";
+    // ✅ FIX: NO cloudinary.uploader.upload()
+    let thumbnail = [];
     if (req.files && req.files.length > 0) {
-      thumbnail = req.files[0].path; 
+      thumbnail = req.files.map((file) => file.path); // already Cloudinary URL
     }
 
     // Generate unique slug
@@ -281,10 +281,10 @@ exports.updateBlogController = async (req, res) => {
   try {
     const { slugOrId } = req.params;
 
-    // Handle file upload for thumbnail - save as String
-    let thumbnail = "";
+    // Handle file upload for thumbnail
+    let thumbnail = [];
     if (req.files && req.files.length > 0) {
-      thumbnail = req.files[0].path; 
+      thumbnail = req.files.map((file) => file.path); // already Cloudinary URL
     }
 
     // Use mongoose's built-in ObjectId check
@@ -305,11 +305,11 @@ exports.updateBlogController = async (req, res) => {
 
     // Prepare update data
     const updateData = { ...req.body };
-    if (thumbnail) {
+    if (thumbnail.length > 0) {
       updateData.thumbnail = thumbnail;
-      updateData.image = ""; 
+      updateData.image = ""; // Clear URL if a file is uploaded to avoid priority issues
     } else if (req.body.image) {
-      updateData.thumbnail = ""; 
+      updateData.thumbnail = []; // Clear file if a URL is provided
     }
 
     // Proceed with update
