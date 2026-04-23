@@ -1,6 +1,7 @@
 import React from "react";
 import "./Hero.css";
-import hms_dash from "../../../assets/images2/hms_dash.svg";
+import hms_dash from "../../../assets/images2/hms_dash.png";
+
 import { useState,useEffect,useRef } from "react";
 import ContactsPopup from "@/Contactspopup/Contactspopup";
 import Demopopup from "@/Demo/Demopopup";
