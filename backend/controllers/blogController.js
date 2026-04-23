@@ -383,10 +383,19 @@ exports.getBlogsByIdController = async (req, res) => {
     const comments = await Comment.find({ blog: blog._id, approved: true })
       .populate('user', 'username')
       .sort({ createdAt: -1 });
+
+    // ✅ SAFE BRIDGE: Convert thumbnail array to string for frontend compatibility
+    const blogObj = blog.toObject();
+    if (Array.isArray(blogObj.thumbnail) && blogObj.thumbnail.length > 0) {
+      blogObj.thumbnail = blogObj.thumbnail[0];
+    } else if (Array.isArray(blogObj.thumbnail)) {
+      blogObj.thumbnail = "";
+    }
+
     return res.status(200).send({
       success: true,
       message: "fetch single blog",
-      blog,
+      blog: blogObj,
       comments,
     });
 
