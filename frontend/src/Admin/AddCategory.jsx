@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import BASE_URL from "../Pages/Config/Config.js"
 import "./AddCategory.css"
 import { Helmet } from "react-helmet-async";
@@ -137,7 +137,6 @@ const Addcategory = () => {
 
   return (
     <>
-    <Toaster position="top-center" reverseOrder={false} />
     <Helmet
     
     

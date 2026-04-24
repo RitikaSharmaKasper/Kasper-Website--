@@ -30,16 +30,14 @@ const Register = () => {
       );
 
       if (data.success) {
-        toast.success("user registered successfully");
-        navigate("/login")
+        toast.success("Registration Successful! Please Login.");
+        navigate("/login");
+      } else {
+        toast.error(data.message || "Registration failed");
       }
     } catch (error) {
       console.log(error);
-      if (error.response && error.response.status === 401) {
-        toast.error(error.response.data.message || "User already exists");
-      } else {
-        toast.error("Registration failed. Please try again.");
-      }
+      toast.error(error.response?.data?.message || "Registration failed. Please try again.");
     };
     console.log(inputs);
   }

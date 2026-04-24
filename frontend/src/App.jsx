@@ -45,6 +45,8 @@ import Addcategory from "./Admin/AddCategory.jsx";
 import AddBlog from "./Admin/AddBlog.jsx";
 import Register from "./Admin/Register.jsx";
 import Read_More from "./Read_More/Read_More.jsx";
+import { Toaster } from "react-hot-toast";
+
 import Main_ServicesTravelTourism from "./Solutions/Travel & Tourism/Main_ServicesTravelTourism.jsx";
 import Main_ServicesHealthcare from "./Solutions/HealthCare & Fitness/Main_ServicesHealthcare.jsx";
 import Main_ServicesRealEstate from "./Solutions/Real Estate/Main_ServicesRealEstate.jsx";
@@ -181,7 +183,7 @@ function App() {
           />
           <Route  path="/privacypolicy"
             element={< PrivacyPolicy/>}/>
-              <Route  path="/termsandconditions"
+          <Route  path="/termsandconditions"
             element={< PrivacyPolicy/>}/>
           <Route
             path="/Development"
@@ -204,6 +206,19 @@ function App() {
           <Route path="blog-details/:slugOrId" element={<AddBlog />} />
         </Route>
       </Routes>
+      <Toaster 
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: "white",
+            color: "black",
+            borderRadius: "10px",
+            fontSize: "16px",
+          },
+        }}
+      />
     </>
   );
 }

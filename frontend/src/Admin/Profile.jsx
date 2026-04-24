@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"; //
 import "./Profile.css";
 import axios from "axios";
 import { Container } from "react-bootstrap";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import BASE_URL from "../Pages/Config/Config.js"
 
 const Profile = () => {
@@ -230,7 +230,6 @@ setFormData({
         fontSize: "15px",
       }}
     >
-      <Toaster position="top-center" reverseOrder={false} />
       <div
         className="profilepageview"
         style={{

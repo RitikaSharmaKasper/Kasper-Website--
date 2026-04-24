@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import axios from "axios";
 import JoditEditor from "jodit-react";
 import BASE_URL from "../Pages/Config/Config.js";
@@ -184,7 +184,6 @@ const AddBlog = () => {
       <Row className="justify-content-center">
         <Col lg={9}>
           <div className="p-4 shadow-sm bg-white rounded border">
-            <Toaster position="top-center"  />
             <h2 className="mb-4 text-center">{isEditMode ? "Update Blog" : "Create Blog"}</h2>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3">

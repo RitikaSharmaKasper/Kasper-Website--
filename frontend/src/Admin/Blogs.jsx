@@ -4,6 +4,7 @@ import moment from "moment";
 import { Box, Typography, Paper, Grid, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useBlogDelete } from "../Admin/BlogContext/BlogDeleteContext.jsx"
+import toast from "react-hot-toast";
 import BASE_URL from "../Pages/Config/Config.js"
 import BlogCard from "../Admin/BlogCard.jsx"
 import "./AdminBlogs.css" 
@@ -50,9 +51,11 @@ const Blogs = () => {
       if (data?.success) {
         deleteBlog(id); // Update the context with the deleted blog ID
         setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
+        toast.success("Blog deleted successfully");
       }
     } catch (error) {
       console.log("Error deleting blog:", error);
+      toast.error("Failed to delete blog. Please try again.");
     }
   };
 

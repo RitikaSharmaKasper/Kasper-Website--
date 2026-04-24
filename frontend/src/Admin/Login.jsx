@@ -32,7 +32,7 @@ const Login = () => {
         password: inputs.password,
       });
       if (data.success) {
-        localStorage.setItem("userId", data?.user._id); //
+        localStorage.setItem("userId", data?.user._id);
         localStorage.setItem("token", data?.token);
         localStorage.setItem("name", data?.name);
         localStorage.setItem("email", data?.user?.email);
@@ -40,17 +40,15 @@ const Login = () => {
         localStorage.setItem("username", JSON.stringify(data.username));
         localStorage.setItem("profile", data?.user?.profile);
 
-        //console.log(data?.user?.email)
-
-        //console.log(data.user._id);
-        //console.log(data);
         dispatch(authActions.login());
-        toast.success("user login successfully");
+        toast.success("Login Successful!");
         navigate("/adminsidebar/my-blogs");
+      } else {
+        toast.error(data.message || "Invalid credentials");
       }
     } catch (error) {
       console.log(error);
-      toast.error("Login failed. Please try again.");
+      toast.error(error.response?.data?.message || "Login failed. Please try again.");
     }
     // console.log(inputs);
   };

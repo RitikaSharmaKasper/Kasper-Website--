@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
 import "./Demopopup.css";
-import { Toaster } from "react-hot-toast";
 import { FaUser, FaEnvelope, FaTimes } from "react-icons/fa";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -165,7 +164,6 @@ const Demopopup = ({ isOpen, onClose }) => {
   return ReactDOM.createPortal(
     <div className="popup-overlay" onClick={onClose}>
       <div className="contact-popup-container" onClick={(e) => e.stopPropagation()}>
-          <Toaster position="top-center" reverseOrder={false} containerStyle={{ zIndex: 9999999 }} />
         <button className="popup-close-btn" onClick={onClose} aria-label="Close">
           <FaTimes />
         </button>
