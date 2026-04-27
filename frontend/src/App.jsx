@@ -60,7 +60,8 @@ import Main_ServicesITAndlTES from "./Solutions/IT & ITES/Main_ServicesITAndlTES
 import CareersPage from "./Career/CareersPage.jsx";
 import PrivacyPolicy from "./TermsAndPrivacy/PrivacyPolicy.jsx";
 import ThankYou from "./Pages/ThankYou/ThankYou.jsx";
-
+import DemoRequests from "./Admin/DemoRequests.jsx";
+import ContactMessages from "./Admin/ContactMessages.jsx";
 function App() {
   return (
     <>
@@ -200,6 +201,8 @@ function App() {
         <Route path="/adminsidebar" element={<AdminLayouts />}>
           <Route path="profile" element={<Profile />} />
           <Route path="blogs" element={<Blogs />} />
+          <Route path="demo-requests" element={<DemoRequests />} />
+          <Route path="contact-messages" element={<ContactMessages />} />
           <Route path="my-blogs" element={<UserBlogs />} />
           <Route path="addcategory" element={<Addcategory />} />
           <Route path="addblog" element={<AddBlog />} />

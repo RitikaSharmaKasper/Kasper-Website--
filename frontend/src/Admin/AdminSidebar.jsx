@@ -21,7 +21,8 @@ import FeaturedPlayListIcon from "@mui/icons-material/FeaturedPlayList";
 import CategoryIcon from "@mui/icons-material/Category";
 import CreateIcon from "@mui/icons-material/Create";
 import BASE_URL from "../Pages/Config/Config.js"
-
+import ContactSupportIcon from "@mui/icons-material/ContactSupport";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 const AdminLayouts = () => {
   const [selectedTab, setSelectedTab] = useState("blogs");
 const [profile, setProfile] = useState(localStorage.getItem("profile"));
@@ -47,7 +48,9 @@ const [profile, setProfile] = useState(localStorage.getItem("profile"));
     "my-blogs",
     "addcategory",
     "profile",
-    "home"
+    "home",
+      "demo-requests",
+    "contact-messages"
   ].some((page) => location.pathname.includes(page));
 
   const base = "/adminsidebar";
@@ -59,6 +62,9 @@ const [profile, setProfile] = useState(localStorage.getItem("profile"));
     { icon: <FeaturedPlayListIcon />, path: `${base}/my-blogs`, key: "my-blogs" },
     { icon: <CategoryIcon />, path: `${base}/addcategory`, key: "addcategory" },
     { icon: <CreateIcon />, path: `${base}/addblog`, key: "addblog" },
+
+     { icon: <AppRegistrationIcon />, path: `${base}/demo-requests`, key: "demo-requests" },
+    { icon: <ContactSupportIcon />, path: `${base}/contact-messages`, key: "contact-messages" },
   ];
 
   // const drawerWidth = isTablet ? 130 : 260;
@@ -244,6 +250,39 @@ const [profile, setProfile] = useState(localStorage.getItem("profile"));
                 }}
               >
                 Create Blog
+              </Button>
+
+
+
+              
+              <Button
+                component={Link}
+                to={`${base}/demo-requests`}
+                fullWidth
+                variant={selectedTab === "demo-requests" ? "contained" : "outlined"}
+                onClick={() => setSelectedTab("demo-requests")}
+                sx={{
+                  backgroundColor: "#673AB7",
+                  color: "white",
+                  "&:hover": { backgroundColor: "#512DA8" },
+                }}
+              >
+                Get Demo
+              </Button>
+
+              <Button
+                component={Link}
+                to={`${base}/contact-messages`}
+                fullWidth
+                variant={selectedTab === "contact-messages" ? "contained" : "outlined"}
+                onClick={() => setSelectedTab("contact-messages")}
+                sx={{
+                  backgroundColor: "#009688",
+                  color: "white",
+                  "&:hover": { backgroundColor: "#00796B" },
+                }}
+              >
+                Contact 
               </Button>
             </Box>
           </Drawer>

@@ -51,7 +51,7 @@ const Team = () => {
         </div>
         <div className="flex-team-column">
           <img src={alokTeam2} alt="Name 1" className="profile-img-leader" />
-          <p className="profile-name-leader">Adnan Nayaar</p>
+          <p className="profile-name-leader">Adnan Nayyar</p>
           <p className="profile-role-leader">Product Designer</p>
         </div>
         <div className="flex-team-column">
